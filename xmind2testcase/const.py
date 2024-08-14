@@ -22,6 +22,7 @@ TAG_STEP_NUMBER = 'step_number'
 TAG_ACTIONS = 'actions'
 TAG_EXPECTEDRESULTS = 'expectedresults'
 TAG_EXECUTION_TYPE = 'execution_type'
+TAG_EXECUTION_STAGE = 'execution_stage'
 
 ATTR_NMAE = 'name'
 ATTR_ID = 'id'

@@ -2,6 +2,7 @@
 # _*_ coding:utf-8 _*_
 
 import logging
+from loguru import logger
 from xmind2testcase.metadata import TestSuite, TestCase, TestStep
 
 config = {'sep': ' ',
@@ -20,6 +21,7 @@ def xmind_to_testsuites(xmind_content_dict):
         logging.debug('start to parse a sheet: %s', sheet['title'])
         root_topic = sheet['topic']
         sub_topics = root_topic.get('topics', [])
+        # logger.info(sub_topics)
 
         if sub_topics:
             root_topic['topics'] = filter_empty_or_ignore_topic(sub_topics)
@@ -36,7 +38,7 @@ def xmind_to_testsuites(xmind_content_dict):
 
 def filter_empty_or_ignore_topic(topics):
     """filter blank or start with config.ignore_char topic"""
-    result = [topic for topic in topics if not(
+    result = [topic for topic in topics if not (
             topic['title'] is None or
             topic['title'].strip() == '' or
             topic['title'][0] in config['ignore_char'])]
@@ -132,14 +134,16 @@ def parse_a_testcase(case_dict, parent):
     testcase.name = gen_testcase_title(topics)
 
     preconditions = gen_testcase_preconditions(topics)
-    testcase.preconditions = preconditions if preconditions else '无'
+    testcase.preconditions = preconditions if preconditions else '' #前置条件默认为空
 
     summary = gen_testcase_summary(topics)
     testcase.summary = summary if summary else testcase.name
     testcase.execution_type = get_execution_type(topics)
+    testcase.execution_stage = get_execution_stage(topics)
     testcase.importance = get_priority(case_dict) or 2
 
     step_dict_list = case_dict.get('topics', [])
+    # logger.info(step_dict_list)
     if step_dict_list:
         testcase.steps = parse_test_steps(step_dict_list)
 
@@ -164,15 +168,29 @@ def parse_a_testcase(case_dict, parent):
 def get_execution_type(topics):
     labels = [topic.get('label', '') for topic in topics]
     labels = filter_empty_or_ignore_element(labels)
-    exe_type = 1
+    exe_type = '功能测试'
     for item in labels[::-1]:
-        if item.lower() in ['自动', 'auto', 'automate', 'automation']:
-            exe_type = 2
-            break
-        if item.lower() in ['手动', '手工', 'manual']:
-            exe_type = 1
-            break
+        if item in ['功能测试', '性能测试', '配置相关', '安装部署', '安全相关', '接口测试', '其他']:
+            exe_type = item
+        #     break
+        # if item.lower() in ['手动', '手工', 'manual']:
+        #     exe_type = 1
+        #     break
     return exe_type
+
+
+def get_execution_stage(topics):
+    stages = [topic.get('link', '') for topic in topics]
+    stages = filter_empty_or_ignore_element(stages)
+    exec_stage = '系统测试阶段'
+    for item in stages[::-1]:
+        if item in ['单元测试阶段', '功能测试阶段', '集成测试阶段', '系统测试阶段', '冒烟测试阶段', '版本验证阶段']:
+            exec_stage = item
+        #     break
+        # if item.lower() in ['手动', '手工', 'manual']:
+        #     exe_type = 1
+        #     break
+    return exec_stage
 
 
 def get_priority(case_dict):
@@ -254,11 +272,3 @@ def get_test_result(markers):
         result = 0
 
     return result
-
-
-
-
-
-
-
-

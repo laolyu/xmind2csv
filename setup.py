@@ -92,7 +92,8 @@ setup(
     ],
     entry_points={  # custom
         'console_scripts': [
-            'xmind2testcase=xmind2testcase.cli:cli_main',
+            'xmind2csv=xmind2testcase.cli:cli_main',
+            # 'xmind2testcase=xmind2testcase.cli:cli_main',
         ]
     },
     cmdclass={

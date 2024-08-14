@@ -47,7 +47,7 @@ class TestSuite(object):
 
 class TestCase(object):
 
-    def __init__(self, name='', version=1, summary='', preconditions='', execution_type=1, importance=2, estimated_exec_duration=3, status=7, result=0, steps=None):
+    def __init__(self, name='', version=1, summary='', preconditions='', execution_type='', execution_stage='',importance=2, estimated_exec_duration=3, status=7, result=0, steps=None):
         """
         TestCase
         :param name: test case name
@@ -66,6 +66,7 @@ class TestCase(object):
         self.summary = summary
         self.preconditions = preconditions
         self.execution_type = execution_type
+        self.execution_stage = execution_stage
         self.importance = importance
         self.estimated_exec_duration = estimated_exec_duration
         self.status = status
@@ -79,6 +80,7 @@ class TestCase(object):
             'summary': self.summary,
             'preconditions': self.preconditions,
             'execution_type': self.execution_type,
+            'execution_stage': self.execution_stage,
             'importance': self.importance,
             'estimated_exec_duration': self.estimated_exec_duration,  # TODO(devin): get estimated content
             'status': self.status,  # TODO(devin): get status content
@@ -95,7 +97,7 @@ class TestCase(object):
 
 class TestStep(object):
 
-    def __init__(self, step_number=1, actions='', expectedresults='', execution_type=1, result=0):
+    def __init__(self, step_number=1, actions='', expectedresults='', execution_type=1, execution_stage='', result=0):
         """
         TestStep
         :param step_number: test step number
@@ -108,6 +110,7 @@ class TestStep(object):
         self.actions = actions
         self.expectedresults = expectedresults
         self.execution_type = execution_type  # TODO(devin): get execution type content
+        self.execution_stage = execution_stage
         self.result = result
 
     def to_dict(self):
@@ -116,6 +119,7 @@ class TestStep(object):
             'actions': self.actions,
             'expectedresults': self.expectedresults,
             'execution_type': self.execution_type,
+            'execution_stage': self.execution_stage,
             'result': self.result
         }
 
