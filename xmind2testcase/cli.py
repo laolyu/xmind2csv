@@ -70,4 +70,5 @@ def cli_main():
 
 
 if __name__ == '__main__':
-    cli_main()
+    launch(port=8000)
+    # cli_main()
